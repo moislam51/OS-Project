@@ -1,26 +1,33 @@
 package models;
 
 public class Process {
-    public String id;
-    public int arrivalTime;
-    public int burstTime;
-    public int priority;
-    
-    
-    public int remainingTime;
-    public int startTime = -1;
-    public int completionTime;
-    
-    public int waitingTime = 0;
-    public int turnaroundTime = 0;
-    public int responseTime = 0;
+    private String id;
+    private int arrivalTime;
+    private int burstTime;
+    private int priority;
+    private int remainingTime;
 
-    public Process(String id, int at, int bt, int pr) {
+    public Process(String id, int arrivalTime, int burstTime, int priority) {
         this.id = id;
-        this.arrivalTime = at;
-        this.burstTime = bt;
-        this.priority = pr;
-        this.remainingTime = bt;
-        System.out.println("object created");
+        this.arrivalTime = arrivalTime;
+        this.burstTime = burstTime;
+        this.priority = priority;
+        this.remainingTime = burstTime;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public int getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public int getBurstTime() {
+        return burstTime;
+    }
+
+    public int getPriority() {
+        return priority;
     }
 }
