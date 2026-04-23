@@ -4,44 +4,94 @@ import utils.InputValidator;
 import models.Process;
 
 public class InputPanel extends javax.swing.JFrame {
+    private java.util.List<models.Process> processList = new java.util.ArrayList<>();
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(InputPanel.class.getName());
 
     
     public InputPanel() {
         initComponents();
-        run.addActionListener(e3 -> {
+  add.addActionListener(e3 -> {
     try {
         String id = processID.getText();
+        
+        for (Process p : processList) {
+            if (p.getId().equalsIgnoreCase(id)) {
+                javax.swing.JOptionPane.showMessageDialog(this, 
+                    "Process ID '" + id + "' already exists! Please use a unique ID.");
+                return; // Stop the action here
+            }
+        }
         int at = Integer.parseInt(arrivalTime.getText());
         int bt = Integer.parseInt(burstTime.getText());
         int pr = Integer.parseInt(priority.getText());
         int q = Integer.parseInt(quantum.getText());
         
-if (InputValidator.isValid(id, at, bt, pr, q)) {
+        if (InputValidator.isValid(id, at, bt, pr, q)) {
             
+            //Create and add the process to our list
             Process p = new Process(id, at, bt, pr);
-            System.out.println("Validation passed. Process created.");
+            processList.add(p);
+            quantum.setEditable(false); 
+            quantum.setEnabled(false);
             
-            // Scheduler.run(p, q);
-
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                "Invalid input values. Please check your data.");
-        }
-
-    } catch (NumberFormatException ex) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Please enter all data.");
-    }
-}); 
-        
-         reset.addActionListener(e -> {
+            processCounterLabel.setText("Processes Added: " + processList.size());
+            
+            // 3. Clear inputs for the next entry (keeping quantum as it's usually the same)
             processID.setText("");
             arrivalTime.setText("");
             burstTime.setText("");
             priority.setText("");
-            quantum.setText("");
-            System.out.println("Reset successful");
+            
+            System.out.println("Process " + id + " added. Total: " + processList.size());
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Invalid input values or not filled!!");
+        }
+    } catch (NumberFormatException ex) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Invalid input values or not filled!!");
+    }
+});
+    reset.addActionListener(e -> {
+        // Clear the List
+        processList.clear();
+        
+        quantum.setEditable(true);
+        quantum.setEnabled(true);
+        
+        processID.setText("");
+        arrivalTime.setText("");
+        burstTime.setText("");
+        priority.setText("");
+        quantum.setText("");
+
+        
+        processCounterLabel.setText("Processes Added: 0");
+
+        System.out.println("All processes cleared.");
+});
+    run.addActionListener(e -> {
+//    if (processList.isEmpty()) {
+//        javax.swing.JOptionPane.showMessageDialog(this, "Please add processes first");
+//        return;
+//    }
+//
+//    try {
+//        int q = Integer.parseInt(quantum.getText());
+//
+//        // 1. Create the Result Page and pass the data
+//        // We pass the list of processes and the quantum value
+//        ResultGUI resultPage = new ResultGUI(new java.util.ArrayList<>(processList), q);
+//        
+//        // 2. Make the result page visible
+//        resultPage.setVisible(true);
+//        resultPage.setLocationRelativeTo(null); // Center it on screen
+//
+//        // 3. Close or Hide the current input page
+//        this.dispose(); 
+//
+//    } catch (NumberFormatException ex) {
+//        javax.swing.JOptionPane.showMessageDialog(this, "Please enter a valid Quantum value.");
+//    }
 });
                 }
 
@@ -50,6 +100,8 @@ if (InputValidator.isValid(id, at, bt, pr, q)) {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
         burstTime = new javax.swing.JTextField();
         priority = new javax.swing.JTextField();
@@ -62,7 +114,13 @@ if (InputValidator.isValid(id, at, bt, pr, q)) {
         processID = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         arrivalTime = new javax.swing.JTextField();
+        add = new javax.swing.JButton();
+        processCounterLabel = new javax.swing.JLabel();
         run = new javax.swing.JButton();
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -133,47 +191,61 @@ if (InputValidator.isValid(id, at, bt, pr, q)) {
             }
         });
 
-        run.setBackground(new java.awt.Color(102, 255, 51));
+        add.setBackground(new java.awt.Color(102, 255, 51));
+        add.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        add.setForeground(new java.awt.Color(0, 0, 0));
+        add.setText("Add");
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
+
+        run.setBackground(new java.awt.Color(51, 102, 255));
         run.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         run.setForeground(new java.awt.Color(0, 0, 0));
         run.setText("Run");
-        run.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                runActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(processCounterLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jLabel2))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(15, 15, 15)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(15, 15, 15)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel2)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                        .addComponent(add)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(reset)
+                        .addContainerGap(12, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(processID, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
                             .addComponent(arrivalTime)
                             .addComponent(burstTime)
                             .addComponent(priority)
-                            .addComponent(quantum)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
+                            .addComponent(quantum))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(run)
-                        .addGap(18, 18, 18)
-                        .addComponent(reset)))
-                .addContainerGap(96, Short.MAX_VALUE))
+                        .addGap(69, 69, 69))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -200,11 +272,14 @@ if (InputValidator.isValid(id, at, bt, pr, q)) {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(quantum)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(49, 49, 49)
+                .addGap(23, 23, 23)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(run)
-                    .addComponent(reset))
-                .addGap(42, 42, 42))
+                    .addComponent(add)
+                    .addComponent(reset)
+                    .addComponent(processCounterLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(run)
+                .addGap(52, 52, 52))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -243,13 +318,14 @@ if (InputValidator.isValid(id, at, bt, pr, q)) {
         // TODO add your handling code here:
     }                                     
 
-    private void runActionPerformed(java.awt.event.ActionEvent evt) {                                    
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {                                    
         
     }                                   
 
    
 
     // Variables declaration - do not modify                     
+    private javax.swing.JButton add;
     private javax.swing.JTextField arrivalTime;
     private javax.swing.JTextField burstTime;
     private javax.swing.JLabel jLabel1;
@@ -258,7 +334,10 @@ if (InputValidator.isValid(id, at, bt, pr, q)) {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField priority;
+    private javax.swing.JLabel processCounterLabel;
     private javax.swing.JTextField processID;
     private javax.swing.JTextField quantum;
     private javax.swing.JButton reset;
