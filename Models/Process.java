@@ -19,15 +19,16 @@ public class Process {
         return id;
     }
 
-    public int getArrivalTime() {
-        return arrivalTime;
-    }
-
     public int getBurstTime() {
         return burstTime;
     }
 
-    public int getPriority() {
-        return priority;
+    public int getRemainingTime() {
+        return remainingTime;
     }
+
+    public void setRemainingTime(int remainingTime) {
+        this.remainingTime = remainingTime;
+    }
+    
 }
