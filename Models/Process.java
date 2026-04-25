@@ -2,10 +2,16 @@ package models;
 
 public class Process {
     private String id;
-    private int arrivalTime;
+    public int arrivalTime;
     private int burstTime;
-    private int priority;
+    public int priority;
+
     private int remainingTime;
+    private int startTime = -1;
+    private int completionTime;
+    private int waitingTime;
+    private int turnaroundTime; 
+    private int responseTime;
 
     public Process(String id, int arrivalTime, int burstTime, int priority) {
         this.id = id;
@@ -19,8 +25,16 @@ public class Process {
         return id;
     }
 
+    public int getArrivalTime() {
+        return arrivalTime;
+    }
+
     public int getBurstTime() {
         return burstTime;
+    }
+
+    public int getPriority() {
+        return priority;
     }
 
     public int getRemainingTime() {
@@ -30,5 +44,44 @@ public class Process {
     public void setRemainingTime(int remainingTime) {
         this.remainingTime = remainingTime;
     }
-    
+
+    public int getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(int startTime) {
+        this.startTime = startTime;
+    }
+
+    public int getCompletionTime() {
+        return completionTime;
+    }
+
+    public void setCompletionTime(int completionTime) {
+        this.completionTime = completionTime;
+    }
+
+    public int getWaitingTime() {
+        return waitingTime;
+    }
+
+    public void setWaitingTime(int waitingTime) {
+        this.waitingTime = waitingTime;
+    }
+
+    public int getTurnaroundTime() {
+        return turnaroundTime;
+    }
+
+    public void setTurnaroundTime(int turnaroundTime) {
+        this.turnaroundTime = turnaroundTime;
+    }
+
+    public int getResponseTime() {
+        return responseTime;
+    }
+
+    public void setResponseTime(int responseTime) {
+        this.responseTime = responseTime;
+    }   
 }
