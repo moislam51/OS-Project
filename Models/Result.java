@@ -22,6 +22,14 @@ public class Result {
         this.avgTAT = avgTAT;
         this.avgRT = avgRT;
     }
+    // added this constructor(2 ways are available to create objects) )
+    public Result(List<Process> processes,
+              double avgWT, double avgTAT, double avgRT) {
+    this.processes = processes;
+    this.avgWT = avgWT;
+    this.avgTAT = avgTAT;
+    this.avgRT = avgRT;
+    }
 
     public double getAvgWT() {
         return avgWT;
@@ -38,5 +46,14 @@ public class Result {
     public void setAvgTAT(double avgTAT) {
         this.avgTAT = avgTAT;
     }
+
+    public double getAvgRT() {
+    return avgRT;
+    }
+
+    public void setAvgRT(double avgRT) {
+    this.avgRT = avgRT;
+    }
     
 }
+
