@@ -1,17 +1,18 @@
 package models;
 
 public class Process {
+    //updated fields, getters, setters to be double instead of int
     private String id;
-    public int arrivalTime;
+    private int arrivalTime;
+    private int priority;
     private int burstTime;
-    public int priority;
 
     private int remainingTime;
     private int startTime = -1;
     private int completionTime;
-    private int waitingTime;
-    private int turnaroundTime; 
-    private int responseTime;
+    private double waitingTime;
+    private double turnaroundTime; 
+    private double responseTime;
 
     public Process(String id, int arrivalTime, int burstTime, int priority) {
         this.id = id;
@@ -61,27 +62,27 @@ public class Process {
         this.completionTime = completionTime;
     }
 
-    public int getWaitingTime() {
-        return waitingTime;
+    public double getWaitingTime() {
+    return waitingTime;
     }
 
-    public void setWaitingTime(int waitingTime) {
-        this.waitingTime = waitingTime;
+    public void setWaitingTime(double waitingTime) {
+    this.waitingTime = waitingTime;
     }
 
-    public int getTurnaroundTime() {
-        return turnaroundTime;
+    public double getTurnaroundTime() {
+    return turnaroundTime;
     }
 
-    public void setTurnaroundTime(int turnaroundTime) {
-        this.turnaroundTime = turnaroundTime;
+    public void setTurnaroundTime(double turnaroundTime) {
+    this.turnaroundTime = turnaroundTime;
+}
+
+    public double getResponseTime() {
+    return responseTime;
     }
 
-    public int getResponseTime() {
-        return responseTime;
+    public void setResponseTime(double responseTime) {
+    this.responseTime = responseTime;
     }
-
-    public void setResponseTime(int responseTime) {
-        this.responseTime = responseTime;
-    }   
 }
