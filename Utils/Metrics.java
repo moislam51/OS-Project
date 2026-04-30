@@ -1,34 +1,3 @@
-//package utils;
-//import models.Result;
-//import models.Process;
-//import java.util.*;
-//public class Metrics {
-//
-//    
-//    public static Result calculate(List<Process> processes) {
-//        if (processes == null || processes.isEmpty()) {
-//            throw new IllegalArgumentException("Process list cannot be null or empty.");
-//        }
-//
-//        double totalWT = 0, totalTAT = 0, totalRT = 0;
-//        int n = processes.size();
-//
-//        for (Process p : processes) {
-//            double tat = p.getCompletionTime() - p.getArrivalTime();
-//            double wt  = tat - p.getBurstTime();
-//            double rt  = p.getStartTime() - p.getArrivalTime();
-//
-//            p.setTurnaroundTime(tat);
-//            p.setWaitingTime(wt);
-//            p.setResponseTime(rt);
-//
-//            totalTAT += tat;
-//            totalWT  += wt;
-//            totalRT  += rt;
-//        }
-//
-//        return new Result(processes, totalWT / n, totalTAT / n, totalRT / n);
-//    }
 package utils;
 
 import models.Result;
