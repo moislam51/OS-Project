@@ -1,7 +1,7 @@
 package utils;
 
 import java.util.*;
-import Models.Process;
+import models.Process;
 
 public class Cloner {
 
@@ -20,4 +20,3 @@ public class Cloner {
         return copy;
     }
 }
-
