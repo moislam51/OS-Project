@@ -2,6 +2,7 @@ package services;
 
 import models.Process;
 import models.Result;
+import utils.Metrics;
 
 import java.util.*;
 
@@ -79,22 +80,9 @@ public class PriorityService {
             ganttChart.add(lastProcess.getId() + " [" + segmentStart + " - " + currentTime + "]");
         }
 
-        double totalWT = 0;
-        double totalTAT = 0;
-        double totalRT = 0;
+        Result result = Metrics.calculate(completedProcesses);
+        result.ganttChart = ganttChart;
+        return result;
 
-        for (Process p : completedProcesses) {
-            totalWT += p.getWaitingTime();
-            totalTAT += p.getTurnaroundTime();
-            totalRT += p.getResponseTime();
-        }
-
-        return new Result(
-                ganttChart,
-                completedProcesses,
-                totalWT / n,
-                totalTAT / n,
-                totalRT / n
-        );
     }
 }
