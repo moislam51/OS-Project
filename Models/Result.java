@@ -54,6 +54,10 @@ public class Result {
     public void setAvgRT(double avgRT) {
     this.avgRT = avgRT;
     }
+
+    public List<String> getGanttChart() {
+    return ganttChart;
+    }
     
 }
 
