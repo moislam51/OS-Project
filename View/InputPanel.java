@@ -69,29 +69,99 @@ public class InputPanel extends javax.swing.JFrame {
 
         System.out.println("All processes cleared.");
 });
-    run.addActionListener(e -> {
-//    if (processList.isEmpty()) {
-//        javax.swing.JOptionPane.showMessageDialog(this, "Please add processes first");
-//        return;
-//    }
-//
-//    try {
-//        int q = Integer.parseInt(quantum.getText());
-//
-//        // 1. Create the Result Page and pass the data
-//        // We pass the list of processes and the quantum value
-//        ResultGUI resultPage = new ResultGUI(new java.util.ArrayList<>(processList), q);
-//        
-//        // 2. Make the result page visible
-//        resultPage.setVisible(true);
-//        resultPage.setLocationRelativeTo(null); // Center it on screen
-//
-//        // 3. Close or Hide the current input page
-//        this.dispose(); 
-//
-//    } catch (NumberFormatException ex) {
-//        javax.swing.JOptionPane.showMessageDialog(this, "Please enter a valid Quantum value.");
-//    }
+
+run.addActionListener(e -> {
+    if (processList.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "Please add at least one process before running.");
+        return;
+    }
+
+    int q;
+    try {
+        q = Integer.parseInt(quantum.getText());
+    } catch (NumberFormatException ex) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "Please enter a valid quantum value.");
+        return;
+    }
+
+    controller.SchedulerController schedulerController = new controller.SchedulerController();
+    models.Result[] results = schedulerController.runScheduling(processList, q);
+
+    views.ComparisonPanel compPanel = new views.ComparisonPanel();
+    compPanel.displayResults(results[1], results[0]);
+
+    views.ResultTablePanel resultTable = new views.ResultTablePanel();
+    resultTable.updateRR(results[1]);
+    resultTable.updatePriority(results[0]);
+
+    views.GanttPanel ganttPanelRR = new views.GanttPanel();
+    views.GanttPanel ganttPanelPR = new views.GanttPanel();
+
+    java.util.List<String> rrIds = new java.util.ArrayList<>();
+    java.util.List<Integer> rrStarts = new java.util.ArrayList<>();
+    java.util.List<Integer> rrEnds = new java.util.ArrayList<>();
+    for (String entry : results[1].getGanttChart()) {
+        String[] parts = entry.split(" \\[");
+        String id = parts[0];
+        String[] times = parts[1].replace("]", "").split(" - ");
+        rrIds.add(id);
+        rrStarts.add(Integer.parseInt(times[0].trim()));
+        rrEnds.add(Integer.parseInt(times[1].trim()));
+    }
+    ganttPanelRR.setChartData(rrIds, rrStarts, rrEnds);
+
+    java.util.List<String> prIds = new java.util.ArrayList<>();
+    java.util.List<Integer> prStarts = new java.util.ArrayList<>();
+    java.util.List<Integer> prEnds = new java.util.ArrayList<>();
+    for (String entry : results[0].getGanttChart()) {
+        String[] parts = entry.split(" \\[");
+        String id = parts[0];
+        String[] times = parts[1].replace("]", "").split(" - ");
+        prIds.add(id);
+        prStarts.add(Integer.parseInt(times[0].trim()));
+        prEnds.add(Integer.parseInt(times[1].trim()));
+    }
+    ganttPanelPR.setChartData(prIds, prStarts, prEnds);
+
+    javax.swing.JFrame resultsFrame = new javax.swing.JFrame("Scheduling Results");
+    resultsFrame.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
+
+    javax.swing.JTabbedPane tabs = new javax.swing.JTabbedPane();
+
+    tabs.addTab("Comparison", compPanel);
+    tabs.addTab("Result Table", resultTable);
+
+   
+    javax.swing.JPanel ganttTab = new javax.swing.JPanel(new java.awt.GridLayout(2, 1, 0, 10));
+
+    javax.swing.JPanel rrSection = new javax.swing.JPanel(new java.awt.BorderLayout());
+    javax.swing.JLabel rrTitle = new javax.swing.JLabel("Round Robin Gantt Chart", javax.swing.SwingConstants.CENTER);
+    rrTitle.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 13));
+    rrSection.add(rrTitle, java.awt.BorderLayout.NORTH);
+    javax.swing.JScrollPane rrScroll = new javax.swing.JScrollPane(ganttPanelRR);
+    rrScroll.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    rrSection.add(rrScroll, java.awt.BorderLayout.CENTER);
+
+    javax.swing.JPanel prSection = new javax.swing.JPanel(new java.awt.BorderLayout());
+    javax.swing.JLabel prTitle = new javax.swing.JLabel("Priority Gantt Chart", javax.swing.SwingConstants.CENTER);
+    prTitle.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 13));
+    prSection.add(prTitle, java.awt.BorderLayout.NORTH);
+    javax.swing.JScrollPane prScroll = new javax.swing.JScrollPane(ganttPanelPR);
+    prScroll.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    prSection.add(prScroll, java.awt.BorderLayout.CENTER);
+
+    ganttTab.add(rrSection);
+    ganttTab.add(prSection);
+
+    tabs.addTab("Gantt Charts", ganttTab);
+   
+
+    resultsFrame.add(tabs);
+    resultsFrame.setSize(800, 500);
+    resultsFrame.setLocationRelativeTo(this);
+    resultsFrame.setVisible(true);
 });
                 }
 
@@ -273,10 +343,11 @@ public class InputPanel extends javax.swing.JFrame {
                     .addComponent(quantum)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(add)
-                    .addComponent(reset)
-                    .addComponent(processCounterLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(processCounterLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(add)
+                        .addComponent(reset)))
                 .addGap(18, 18, 18)
                 .addComponent(run)
                 .addGap(52, 52, 52))
