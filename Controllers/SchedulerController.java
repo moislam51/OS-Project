@@ -1,4 +1,4 @@
-package controller;
+package Controller;
 
 import models.Process;
 import models.Result;
